@@ -46,7 +46,7 @@ Inside the "task" project you'll find the "ContactTest" class, you might have a 
 other helper, util, etc. classes as well. All testcases are making use of JUnit5 and AssertJ. With
 the sample app running, those test cases are expected to pass. There are some TODOs inside
 ContactTest you should have a look at and implement/fix what's missing. Please commit your changes 
-to the VCS of your choice and provide us access to it.
+to the VCS of your choice and provide us access or submit it per mail.
 
 Here's a short list summarizing the bullet points of the task:
 - familiarize yourself with the code, implement what's missing (TODOs), so we can have a chat about it
