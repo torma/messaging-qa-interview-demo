@@ -8,6 +8,7 @@ All task-relevant material can be found inside this repository. The repository i
 
 **Requirements:**
 - Java 21
+- Maven
 
 This is a very basic Spring Boot application that you will be testing. You can either run the app from the IDE of you choice, the main class is "QATaskApplication.java" or you build a jar file by doing mvn package and then run the application via CLI. 
 After the app has started successfully you can access the OpenAPI definition using the URL "http://localhost:18080/swagger-ui/index.html".
