@@ -26,15 +26,15 @@ The following three contacts are added on automatically on startup of the sample
 - 2, "name", "name"
 
 **GET**:
-- /contact/allContacts: retrieve all contacts, stored in the app
-- /contact/firstname/{firstname}: retrieve all contacts where the firstname includes the string provided as path parameter (contains case-insensitive)
-- /contact/lastname/{lastname}: retrieve all contacts where the lastname includes the string provided as path parameter (contains case-insensitive)
+- `/contact/allContacts`: retrieve all contacts, stored in the app
+- `/contact/firstname/{firstname}`: retrieve all contacts where the firstname includes the string provided as path parameter (contains case-insensitive)
+- `/contact/lastname/{lastname}`: retrieve all contacts where the lastname includes the string provided as path parameter (contains case-insensitive)
 
 **POST**:
-- /contact/createOrUpdate/{id}: updates an existing contact where the id of that contact is matching the one provided as path parameter, if no matching contact is found creates a new one, requires JSON of a serialized contact in the request body
+- `/contact/createOrUpdateContact/{id}`: updates an existing contact where the id of that contact is matching the one provided as path parameter, if no matching contact is found creates a new one, requires JSON of a serialized contact in the request body
 
 **DELETE**:
-- /contact/{id}: deletes the contact matching the path parameter id, does nothing if none exists
+- `/contact/{id}`: deletes the contact matching the path parameter id, does nothing if none exists
 
 
 ## Actual QA task:
