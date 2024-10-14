@@ -2,6 +2,7 @@ package com.ecosio.qa.gitlabinterface.controller;
 
 import com.ecosio.qa.gitlabinterface.model.Contact;
 
+import java.util.Map.Entry;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
@@ -165,17 +166,18 @@ public class ContactController {
         "looking for matching contacts before creating new one"
     );
 
-    if (contacts.get(id) != null) {
+    if (getContactByContactId(id) != null) {
       log.info(
           "matching contact found, updating this one"
       );
 
-      contacts.put(id, contact);
+      Integer mapId = getContactByContactId(id).getKey();
+      contacts.put(mapId, contact);
       log.info(
           "updating done"
       );
     } else {
-      contacts.put(contacts.size() + 1, contact);
+      contacts.put(contacts.size(), contact);
       log.info("contact saved");
     }
     return new ResponseEntity<>(
@@ -205,9 +207,11 @@ public class ContactController {
       @PathVariable int id
   ) {
     log.info("removing id: {}", id);
-    Contact deletedContact = contacts.remove(id);
+    Entry<Integer, Contact> contactToDelete = getContactByContactId(id);
+
+    Contact deletedContact = contactToDelete != null? contactToDelete.getValue() : new Contact();
     return new ResponseEntity<>(
-        Objects.requireNonNullElseGet(deletedContact, Contact::new),
+        deletedContact,
         new HttpHeaders(),
         HttpStatus.OK
     );
@@ -229,6 +233,14 @@ public class ContactController {
         .stream()
         .filter(p -> StringUtils.containsIgnoreCase(p.getFirstname(), lastname))
         .toList();
+  }
+
+  private Entry<Integer, Contact> getContactByContactId(int id) {
+    return contacts.entrySet()
+        .stream()
+        .filter(c -> c.getValue().getId() == id)
+        .findFirst()
+        .orElse(null);
   }
 
   @Bean("httpLogging")
