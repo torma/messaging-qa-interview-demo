@@ -203,22 +203,25 @@ public class ContactController {
           })
   })
   @DeleteMapping("{id}")
-  public ResponseEntity<Contact> deleteContact(
+  public ResponseEntity deleteContact(
       @PathVariable int id
   ) {
     log.info("removing id: {}", id);
     Entry<Integer, Contact> contactToDelete = getContactByContactId(id);
-
-    Contact deletedContact = new Contact();
+    
     if(contactToDelete != null) {
-      deletedContact = contactToDelete.getValue();
       contacts.remove(contactToDelete.getKey());
+      return new ResponseEntity<>(
+          contactToDelete.getValue(),
+          new HttpHeaders(),
+          HttpStatus.OK
+      );
     }
-    return new ResponseEntity<>(
-        deletedContact,
-        new HttpHeaders(),
-        HttpStatus.OK
-    );
+    
+    return ResponseEntity
+        .status(HttpStatus.NOT_FOUND)
+        .body("Contact with requested ID doesn't exist");
+
   }
 
   private List<Contact> findByFirstname(final String firstname) {
