@@ -209,7 +209,11 @@ public class ContactController {
     log.info("removing id: {}", id);
     Entry<Integer, Contact> contactToDelete = getContactByContactId(id);
 
-    Contact deletedContact = contactToDelete != null? contactToDelete.getValue() : new Contact();
+    Contact deletedContact = new Contact();
+    if(contactToDelete != null) {
+      deletedContact = contactToDelete.getValue();
+      contacts.remove(contactToDelete.getKey());
+    }
     return new ResponseEntity<>(
         deletedContact,
         new HttpHeaders(),
