@@ -1,4 +1,4 @@
-package com.ecosio.qa.gitlabinterface.model;
+package com.ecosio.qa.sample.model;
 
 import java.util.Objects;
 

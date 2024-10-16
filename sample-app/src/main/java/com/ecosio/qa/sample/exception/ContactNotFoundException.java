@@ -1,4 +1,4 @@
-package com.ecosio.qa.gitlabinterface.exception;
+package com.ecosio.qa.sample.exception;
 
 public class ContactNotFoundException extends RuntimeException {
 
