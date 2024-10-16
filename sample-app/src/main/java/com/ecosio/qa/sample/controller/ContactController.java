@@ -1,6 +1,6 @@
-package com.ecosio.qa.gitlabinterface.controller;
+package com.ecosio.qa.sample.controller;
 
-import com.ecosio.qa.gitlabinterface.model.Contact;
+import com.ecosio.qa.sample.model.Contact;
 
 import java.util.Map.Entry;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +20,6 @@ import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import io.swagger.v3.oas.annotations.Operation;
