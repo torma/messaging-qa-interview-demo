@@ -1,5 +1,6 @@
 # Review Remarks
 
+Please note that I was mainly defensive on the implementation not touching the parts which were not causing me problems while starting or running the applications.
 I'm summarizing my thoughts on the tests created in this repository and also to some extent about the framework design.
 
 ---
@@ -14,7 +15,22 @@ I would do this even for a Proof of Concept (POC). It's easy to forget about har
 
 ## Use of Soft Assertions
 
-I would introduce `SoftAssertions`. While not strictly necessary for the current simple tests, they are incredibly useful for more complex scenarios. When dealing with large API responses, it's often better to run a list of assertions and see all failures at once, rather than having the test fail on the first error.
+I would introduce `SoftAssertions`. Not sure if this was not used on purpose as I see this is a dependency in the pom.xml but since it was not used I have no way to tell without any instructions if I can use it, or it's use should be avoided. 
+
+---
+
+## RestAssured
+
+I see it's part of the pom.xml ad a dependency but since it's not used explicitly I didn't go ahead and use it.
+
+---
+
+## Implementing api interactions
+
+In general, I think there should be two implementations for each supported https method call against an endpoint in the test fw:
+
+1. One which returns a generic response entity, which is useful for further checks when an error is returned by the call
+2. Another which performs some basic verification on the response and then returns the pojo representing the response returned by a successful call.
 
 ---
 

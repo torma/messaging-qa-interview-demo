@@ -54,15 +54,56 @@ public class ContactTest extends BaseTest {
 
     log.info("");
 
-    // TODO: implement remaining testcase
+    // I would extract all constants from this test to the top but as mentioned in the review.md I'm quite defensive here and only change places where there is a TODO comment.
+    List<Contact> contactsWithExistingName = getContactByFirstname("abc");
+    // Ideally I would get bach the updated contact object here and could work with that.
+    updateContact(contactsBefore.get(0), updatedContact);
 
+    List<Contact> contactsAfter = getContactByFirstname("abc");
+
+    assertThat(contactsAfter.size())
+      .as("number of contacts after update")
+      .isEqualTo(contactsBefore.size() + contactsWithExistingName.size());
+    Contact updatedContactFromResponse = contactsAfter
+            .stream()
+            .filter(contact -> contact.getId() == updatedContact.getId())
+            .findFirst()
+            .orElseThrow();
+    assertThat(updatedContactFromResponse.getId())
+      .as("id after update has changed")
+      .isEqualTo(updatedContact.getId());
+    assertThat(updatedContactFromResponse.getFirstname())
+      .as("firstname after update does not match the expected value")
+      .isEqualTo(updatedContact.getFirstname());
+    assertThat(updatedContactFromResponse.getLastname())
+      .as("lastname after update does not match the expected value")
+      .isEqualTo(updatedContact.getLastname());
+
+    // Restore contact
+    // Since we don't explicitly control the test data at setup at lest I would restore the original data
+    updateContact(updatedContact, contactsBefore.get(0));
   }
 
   @Test
   void getContactByFirstname() {
 
     // TODO: get ALL contacts with the string "name" in it and add assertions
+    final String firstNameFilter = "name";
 
+    // Before querying the endpoint I would actually add a new contact with firstname containing 'name'
+
+    List<Contact> contactsWithName = List.of();
+    try {
+      contactsWithName = getContactByFirstname("name");
+    } catch (IOException ignored) {
+      throw new RuntimeException();
+    }
+
+    assertThat(contactsWithName.size())
+      .as("Contacts returned with '" + firstNameFilter +"' in their first name should have a positive value")
+      .isGreaterThan(0);
+    assertThat(contactsWithName)
+      .as("All returned contracts should have '" + firstNameFilter + "' in their firstname")
+      .allMatch(contact -> contact.getFirstname().contains(firstNameFilter));
   }
-
 }

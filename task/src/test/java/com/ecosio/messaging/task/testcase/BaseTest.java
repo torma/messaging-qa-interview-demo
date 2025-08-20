@@ -2,12 +2,17 @@ package com.ecosio.messaging.task.testcase;
 
 import com.ecosio.messaging.task.model.Contact;
 import com.ecosio.messaging.task.util.HttpClientHelper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 
 import java.io.IOException;
@@ -53,15 +58,26 @@ public class BaseTest {
    *
    * @param currentContact contact to be updated
    * @param updatedContact contact to update the existing one to
-   * @throws IOException
    */
   protected void updateContact(
       Contact currentContact,
       Contact updatedContact
   ) {
+      // currentContact can be useful in case we if we would need to implement negative tests for the endpoint
+      // but TBH that test should be a unit test
 
-    // TODO: implement a method updating a contact
+      HttpPost httpPost = new HttpPost(appUnderTestBaseUrl + "/createOrUpdateContact/" + currentContact.getId());
 
+      httpPost.setEntity(pojoToJsonStringEntity(updatedContact));
+
+      // I only added this try catch to avoid changing the signature as it was not part of the TODO comment
+      // But normally I would add the IOException to the signature as I assume there is nothing really to be done in that case.
+      try {
+          connectionHelper(httpPost);
+      } catch (IOException ignored) {
+      }
+
+      // At this point I would actually return either the contract from the update or the response object produced by httpClient.execute
   }
 
   /**
@@ -96,4 +112,18 @@ public class BaseTest {
 
   }
 
+  protected static StringEntity pojoToJsonStringEntity(Object pojo) {
+      ObjectMapper objectMapper = new ObjectMapper();
+      String requestBody;
+      try {
+          requestBody = objectMapper.writeValueAsString(pojo);
+      } catch (JsonProcessingException e) {
+          // My assumption is that we will never actually get here.
+          // TBH this exception on the writeValueAsString signature looks BS
+          // Also see discussion https://stackoverflow.com/questions/26716020/how-to-get-a-jsonprocessingexception-using-jackson
+          log.error("Unexpected exception when trying to write json object {}", pojo, e);
+          throw new RuntimeException();
+      }
+      return new StringEntity(requestBody, ContentType.APPLICATION_JSON);
+  }
 }
